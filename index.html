@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>송금 요청</title>
 
   <style>
@@ -14,56 +15,90 @@
     body {
       margin: 0;
       min-height: 100vh;
+      background: #f6f8fb;
+      color: #111827;
       display: grid;
       place-items: center;
-      background: #f4f7fb;
-      color: #111827;
       padding: 20px;
     }
 
     .wrap {
       width: 100%;
-      max-width: 420px;
-      background: white;
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      max-width: 430px;
+      background: #ffffff;
+      border: 1px solid #e5eaf1;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      color: #2563eb;
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: 26px;
+      margin: 0 0 8px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
     }
 
     p {
-      margin: 0 0 22px;
+      margin: 0 0 20px;
       color: #64748b;
-      line-height: 1.5;
+      line-height: 1.55;
+      font-size: 15px;
     }
 
     label {
       display: block;
-      margin: 16px 0 7px;
-      font-weight: 700;
+      margin: 15px 0 7px;
+      font-weight: 800;
       font-size: 14px;
+      color: #334155;
     }
 
     input,
     select {
       width: 100%;
-      height: 48px;
+      height: 49px;
       border: 1px solid #dbe3ef;
       border-radius: 12px;
       padding: 0 14px;
       font-size: 16px;
       outline: none;
-      background: white;
+      background: #ffffff;
+      color: #111827;
     }
 
     input:focus,
     select:focus {
-      border-color: #3182f6;
-      box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.12);
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.11);
+    }
+
+    .person-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 18px 0 8px;
     }
 
     button,
@@ -71,70 +106,104 @@
       width: 100%;
       height: 52px;
       border: 0;
-      border-radius: 14px;
-      background: #3182f6;
+      border-radius: 12px;
+      background: #2563eb;
       color: white;
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 900;
       cursor: pointer;
-      margin-top: 18px;
       display: grid;
       place-items: center;
       text-decoration: none;
     }
 
-    .person-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 18px 0 6px;
-    }
-
     .person-buttons button {
-      margin-top: 0;
-      background: #eef4ff;
-      color: #2563eb;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
     }
 
     .person-buttons button.active {
-      background: #3182f6;
-      color: white;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #93c5fd;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .sub {
-      background: #eef4ff;
-      color: #2563eb;
+      background: #f8fafc;
+      color: #1e293b;
+      border: 1px solid #dbe3ef;
+    }
+
+    .primary {
+      margin-top: 18px;
     }
 
     .money {
-      font-size: 36px;
-      font-weight: 900;
+      font-size: 38px;
+      font-weight: 950;
       letter-spacing: 0;
-      margin: 18px 0 4px;
+      margin: 20px 0 6px;
     }
 
-    .info {
+    .summary {
       background: #f8fafc;
+      border: 1px solid #e5eaf1;
       border-radius: 14px;
-      padding: 14px;
+      padding: 15px;
       margin-top: 18px;
       color: #475569;
-      line-height: 1.6;
+      line-height: 1.65;
       font-size: 14px;
       word-break: break-all;
     }
 
+    .account-box {
+      background: #f8fafc;
+      border: 1px solid #e5eaf1;
+      border-radius: 14px;
+      padding: 15px;
+      margin-top: 16px;
+      line-height: 1.7;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .account-box strong {
+      color: #111827;
+      font-size: 16px;
+    }
+
     .hidden {
       display: none;
+    }
+
+    .safe {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
     }
   </style>
 </head>
 
 <body>
   <main class="wrap">
+    <div class="brand">
+      <div class="logo">₩</div>
+      <span>간편 송금 요청</span>
+    </div>
+
     <section id="maker">
       <h1>송금 링크 만들기</h1>
-      <p>받는 사람을 고르고, 상대방 이름과 금액을 입력하세요.</p>
+      <p>받는 사람을 선택하고 상대방 이름, 금액을 입력하면 공유 링크가 만들어집니다.</p>
 
       <div class="person-buttons">
         <button id="parkBtn" class="active" onclick="setPerson('park')">박지완</button>
@@ -153,22 +222,26 @@
       <label>은행명</label>
       <select id="bank">
         <option value="0">토스뱅크</option>
-        <option value="1" selected>농협</option>
+        <option value="1" selected>SC제일은행</option>
       </select>
 
       <label>계좌번호</label>
       <select id="account">
         <option value="0">100167624090</option>
-        <option value="1" selected>3521907992053</option>
+        <option value="1" selected>55020419416</option>
       </select>
 
       <label>받을 금액</label>
       <input id="amount" type="number" placeholder="예: 15000" />
 
-      <button onclick="makeLink()">공유 링크 만들기</button>
+      <button class="primary" onclick="makeLink()">송금 링크 만들기</button>
 
-      <div id="result" class="info hidden"></div>
-      <button id="copyBtn" class="sub hidden" onclick="copyLink()">링크 복사하기</button>
+      <div id="result" class="summary hidden"></div>
+
+      <div id="shareActions" class="actions hidden">
+        <button class="sub" onclick="copyLink()">링크 복사</button>
+        <button onclick="shareLink()">공유하기</button>
+      </div>
     </section>
 
     <section id="payer" class="hidden">
@@ -177,25 +250,57 @@
 
       <div class="money" id="payAmount"></div>
 
-      <a id="tossLink" class="button" href="#">토스 앱으로 송금하기</a>
+      <a id="tossLink" class="button primary" href="#">토스 앱으로 바로 송금</a>
 
-      <div class="info">
-        토스 앱이 열리지 않으면 아래 계좌로 직접 송금해주세요.<br />
+      <div class="account-box">
+        토스 앱이 열리지 않으면 아래 계좌로 송금해주세요.<br />
         <strong id="fallbackAccount"></strong>
+      </div>
+
+      <div class="safe">
+        금액과 받는 사람 정보를 확인한 뒤 송금해주세요.
       </div>
     </section>
   </main>
 
   <script>
     const receivers = ["박지완", "장우영"];
-    const banks = ["토스뱅크", "농협"];
-    const accounts = ["100167624090", "3521907992053"];
+    const banks = ["토스뱅크", "SC제일은행"];
+    const accounts = ["100167624090", "55020419416"];
 
     const maker = document.getElementById("maker");
     const payer = document.getElementById("payer");
 
-    const params = new URLSearchParams(location.search);
-    const data = params.get("x");
+    function encodeData(text) {
+      const bytes = new TextEncoder().encode(text);
+      let binary = "";
+
+      bytes.forEach(byte => {
+        binary += String.fromCharCode(byte);
+      });
+
+      return btoa(binary)
+        .replaceAll("+", "-")
+        .replaceAll("/", "_")
+        .replaceAll("=", "");
+    }
+
+    function decodeData(text) {
+      text = text.replaceAll("-", "+").replaceAll("_", "/");
+
+      while (text.length % 4) {
+        text += "=";
+      }
+
+      const binary = atob(text);
+      const bytes = new Uint8Array(binary.length);
+
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+
+      return new TextDecoder().decode(bytes);
+    }
 
     function setPerson(person) {
       const receiverName = document.getElementById("receiverName");
@@ -222,16 +327,23 @@
       }
     }
 
-    if (data) {
-      const parts = data.split(",");
+    function openPaymentPage() {
+      const hash = location.hash.replace("#", "");
 
-      const payerName = decodeURIComponent(parts[0] || "");
-      const receiverName = receivers[Number(parts[1])];
-      const bank = banks[Number(parts[2])];
-      const account = accounts[Number(parts[3])];
-      const amount = parts[4];
+      if (!hash) return;
 
-      if (payerName && receiverName && bank && account && amount) {
+      try {
+        const decoded = decodeData(hash);
+        const parts = decoded.split("|");
+
+        const payerName = parts[0];
+        const receiverName = receivers[Number(parts[1])];
+        const bank = banks[Number(parts[2])];
+        const account = accounts[Number(parts[3])];
+        const amount = parts[4];
+
+        if (!payerName || !receiverName || !bank || !account || !amount) return;
+
         maker.classList.add("hidden");
         payer.classList.remove("hidden");
 
@@ -243,7 +355,7 @@
           `${payerName}님, 송금해주세요`;
 
         document.getElementById("payText").textContent =
-          `${receiverName}님에게 송금하는 요청입니다.`;
+          `${receiverName}님에게 보내는 송금 요청입니다.`;
 
         document.getElementById("payAmount").textContent =
           `${amountText}원`;
@@ -258,6 +370,8 @@
           `&origin=link`;
 
         document.getElementById("tossLink").href = tossUrl;
+      } catch {
+        alert("송금 링크가 올바르지 않습니다.");
       }
     }
 
@@ -273,29 +387,32 @@
         return;
       }
 
-      const shortData = [
-        encodeURIComponent(payerName),
+      const packed = [
+        payerName,
         receiverIndex,
         bankIndex,
         accountIndex,
         amount
-      ].join(",");
+      ].join("|");
 
       const shortLink =
         location.origin +
         location.pathname +
-        "?x=" +
-        shortData;
+        "#" +
+        encodeData(packed);
 
       window.createdLink = shortLink;
+      window.shareTitle = `${payerName}님 송금해주세요`;
+      window.shareText = `${payerName}님, 송금 요청이 도착했습니다.`;
 
       const result = document.getElementById("result");
       result.classList.remove("hidden");
       result.innerHTML =
-        `<strong>${payerName}님 송금해주세요</strong><br><br>` +
+        `<strong>${payerName}님 송금해주세요</strong><br>` +
+        `송금 링크가 준비됐습니다.<br><br>` +
         `${shortLink}`;
 
-      document.getElementById("copyBtn").classList.remove("hidden");
+      document.getElementById("shareActions").classList.remove("hidden");
     }
 
     async function copyLink() {
@@ -307,7 +424,27 @@
       }
     }
 
+    async function shareLink() {
+      if (!window.createdLink) {
+        alert("먼저 송금 링크를 만들어주세요.");
+        return;
+      }
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: window.shareTitle,
+            text: window.shareText,
+            url: window.createdLink
+          });
+        } catch {}
+      } else {
+        await copyLink();
+      }
+    }
+
     setPerson("park");
+    openPaymentPage();
   </script>
 </body>
 </html>
