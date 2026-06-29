@@ -1,10 +1,10 @@
-```html
 <!doctype html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>송금 요청</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -63,7 +63,8 @@
       box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.12);
     }
 
-    button, a.button {
+    button,
+    a.button {
       width: 100%;
       height: 52px;
       border: 0;
@@ -99,6 +100,7 @@
       color: #475569;
       line-height: 1.6;
       font-size: 14px;
+      word-break: break-all;
     }
 
     .hidden {
@@ -106,15 +108,18 @@
     }
   </style>
 </head>
+
 <body>
   <main class="wrap">
     <section id="maker">
       <h1>송금 링크 만들기</h1>
-      <p>받을 금액을 입력하면 공유할 수 있는 링크가 만들어집니다.</p>
+      <p>상대방 이름과 받을 금액을 입력하면 짧은 공유 링크가 만들어집니다.</p>
 
-      <!-- 여기에 본인 계좌 정보를 적으세요 -->
+      <label>송금할 사람 이름</label>
+      <input id="payerName" placeholder="예: 민수" />
+
       <label>받는 사람 이름</label>
-      <input id="name" value="홍길동" />
+      <input id="receiverName" value="홍길동" />
 
       <label>은행명</label>
       <input id="bank" value="토스뱅크" />
@@ -132,8 +137,9 @@
     </section>
 
     <section id="payer" class="hidden">
-      <h1>송금 요청</h1>
+      <h1 id="payTitle">송금해주세요</h1>
       <p id="payText"></p>
+
       <div class="money" id="payAmount"></div>
 
       <a id="tossLink" class="button" href="#">토스 앱으로 송금하기</a>
@@ -151,22 +157,28 @@
     const maker = document.getElementById("maker");
     const payer = document.getElementById("payer");
 
-    const amountParam = params.get("amount");
-    const nameParam = params.get("name");
-    const bankParam = params.get("bank");
-    const accountParam = params.get("account");
+    const payerNameParam = params.get("p");
+    const receiverNameParam = params.get("r");
+    const bankParam = params.get("b");
+    const accountParam = params.get("a");
+    const amountParam = params.get("m");
 
-    if (amountParam && nameParam && bankParam && accountParam) {
+    if (payerNameParam && receiverNameParam && bankParam && accountParam && amountParam) {
       maker.classList.add("hidden");
       payer.classList.remove("hidden");
 
-      const amount = Number(amountParam).toLocaleString("ko-KR");
+      const amountText = Number(amountParam).toLocaleString("ko-KR");
+
+      document.title = `${payerNameParam}님 송금해주세요`;
+
+      document.getElementById("payTitle").textContent =
+        `${payerNameParam}님, 송금해주세요`;
 
       document.getElementById("payText").textContent =
-        `${nameParam}님에게 송금해주세요.`;
+        `${receiverNameParam}님에게 송금하는 요청입니다.`;
 
       document.getElementById("payAmount").textContent =
-        `${amount}원`;
+        `${amountText}원`;
 
       document.getElementById("fallbackAccount").textContent =
         `${bankParam} ${accountParam}`;
@@ -181,36 +193,47 @@
     }
 
     function makeLink() {
-      const name = document.getElementById("name").value.trim();
+      const payerName = document.getElementById("payerName").value.trim();
+      const receiverName = document.getElementById("receiverName").value.trim();
       const bank = document.getElementById("bank").value.trim();
       const account = document.getElementById("account").value.trim();
       const amount = document.getElementById("amount").value.trim();
 
-      if (!name || !bank || !account || !amount) {
-        alert("이름, 은행명, 계좌번호, 금액을 모두 입력해주세요.");
+      if (!payerName || !receiverName || !bank || !account || !amount) {
+        alert("송금할 사람 이름, 받는 사람 이름, 은행명, 계좌번호, 금액을 모두 입력해주세요.");
         return;
       }
 
       const url = new URL(location.href);
-      url.searchParams.set("name", name);
-      url.searchParams.set("bank", bank);
-      url.searchParams.set("account", account);
-      url.searchParams.set("amount", amount);
+
+      url.search = "";
+      url.searchParams.set("p", payerName);
+      url.searchParams.set("r", receiverName);
+      url.searchParams.set("b", bank);
+      url.searchParams.set("a", account);
+      url.searchParams.set("m", amount);
 
       window.createdLink = url.toString();
 
       const result = document.getElementById("result");
       result.classList.remove("hidden");
-      result.innerHTML = `아래 링크를 상대방에게 보내세요.<br><br>${window.createdLink}`;
+      result.innerHTML =
+        `<strong>${payerName}님 송금해주세요</strong><br><br>` +
+        `${window.createdLink}`;
 
       document.getElementById("copyBtn").classList.remove("hidden");
     }
 
     async function copyLink() {
-      await navigator.clipboard.writeText(window.createdLink);
-      alert("링크가 복사됐습니다.");
+      const text = document.getElementById("result").innerText;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        alert("공유 문구와 링크가 복사됐습니다.");
+      } catch {
+        alert("복사가 안 되면 링크를 직접 꾹 눌러 복사해주세요.");
+      }
     }
   </script>
 </body>
 </html>
-```
