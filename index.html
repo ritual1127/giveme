@@ -83,6 +83,24 @@
       text-decoration: none;
     }
 
+    .person-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 18px 0 6px;
+    }
+
+    .person-buttons button {
+      margin-top: 0;
+      background: #eef4ff;
+      color: #2563eb;
+    }
+
+    .person-buttons button.active {
+      background: #3182f6;
+      color: white;
+    }
+
     .sub {
       background: #eef4ff;
       color: #2563eb;
@@ -116,7 +134,12 @@
   <main class="wrap">
     <section id="maker">
       <h1>송금 링크 만들기</h1>
-      <p>상대방 이름과 금액을 입력하면 공유 링크가 만들어집니다.</p>
+      <p>받는 사람을 고르고, 상대방 이름과 금액을 입력하세요.</p>
+
+      <div class="person-buttons">
+        <button id="parkBtn" class="active" onclick="setPerson('park')">박지완</button>
+        <button id="jangBtn" onclick="setPerson('jang')">장우영</button>
+      </div>
 
       <label>송금할 사람 이름</label>
       <input id="payerName" placeholder="예: 민수" />
@@ -173,6 +196,31 @@
 
     const params = new URLSearchParams(location.search);
     const data = params.get("x");
+
+    function setPerson(person) {
+      const receiverName = document.getElementById("receiverName");
+      const bank = document.getElementById("bank");
+      const account = document.getElementById("account");
+
+      const parkBtn = document.getElementById("parkBtn");
+      const jangBtn = document.getElementById("jangBtn");
+
+      if (person === "jang") {
+        receiverName.value = "1";
+        bank.value = "0";
+        account.value = "0";
+
+        jangBtn.classList.add("active");
+        parkBtn.classList.remove("active");
+      } else {
+        receiverName.value = "0";
+        bank.value = "1";
+        account.value = "1";
+
+        parkBtn.classList.add("active");
+        jangBtn.classList.remove("active");
+      }
+    }
 
     if (data) {
       const parts = data.split(",");
@@ -258,6 +306,8 @@
         alert("복사가 안 되면 링크를 직접 꾹 눌러 복사해주세요.");
       }
     }
+
+    setPerson("park");
   </script>
 </body>
 </html>
