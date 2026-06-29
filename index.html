@@ -1,0 +1,216 @@
+```html
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>송금 요청</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #f4f7fb;
+      color: #111827;
+      padding: 20px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 26px;
+    }
+
+    p {
+      margin: 0 0 22px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 7px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #dbe3ef;
+      border-radius: 12px;
+      padding: 0 14px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #3182f6;
+      box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.12);
+    }
+
+    button, a.button {
+      width: 100%;
+      height: 52px;
+      border: 0;
+      border-radius: 14px;
+      background: #3182f6;
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 18px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+    }
+
+    .sub {
+      background: #eef4ff;
+      color: #2563eb;
+    }
+
+    .money {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: 0;
+      margin: 18px 0 4px;
+    }
+
+    .info {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 18px;
+      color: #475569;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section id="maker">
+      <h1>송금 링크 만들기</h1>
+      <p>받을 금액을 입력하면 공유할 수 있는 링크가 만들어집니다.</p>
+
+      <!-- 여기에 본인 계좌 정보를 적으세요 -->
+      <label>받는 사람 이름</label>
+      <input id="name" value="홍길동" />
+
+      <label>은행명</label>
+      <input id="bank" value="토스뱅크" />
+
+      <label>계좌번호</label>
+      <input id="account" value="1000-0000-0000" />
+
+      <label>받을 금액</label>
+      <input id="amount" type="number" placeholder="예: 15000" />
+
+      <button onclick="makeLink()">공유 링크 만들기</button>
+
+      <div id="result" class="info hidden"></div>
+      <button id="copyBtn" class="sub hidden" onclick="copyLink()">링크 복사하기</button>
+    </section>
+
+    <section id="payer" class="hidden">
+      <h1>송금 요청</h1>
+      <p id="payText"></p>
+      <div class="money" id="payAmount"></div>
+
+      <a id="tossLink" class="button" href="#">토스 앱으로 송금하기</a>
+
+      <div class="info">
+        토스 앱이 열리지 않으면 아래 계좌로 직접 송금해주세요.<br />
+        <strong id="fallbackAccount"></strong>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+
+    const maker = document.getElementById("maker");
+    const payer = document.getElementById("payer");
+
+    const amountParam = params.get("amount");
+    const nameParam = params.get("name");
+    const bankParam = params.get("bank");
+    const accountParam = params.get("account");
+
+    if (amountParam && nameParam && bankParam && accountParam) {
+      maker.classList.add("hidden");
+      payer.classList.remove("hidden");
+
+      const amount = Number(amountParam).toLocaleString("ko-KR");
+
+      document.getElementById("payText").textContent =
+        `${nameParam}님에게 송금해주세요.`;
+
+      document.getElementById("payAmount").textContent =
+        `${amount}원`;
+
+      document.getElementById("fallbackAccount").textContent =
+        `${bankParam} ${accountParam}`;
+
+      const tossUrl =
+        `supertoss://send?amount=${encodeURIComponent(amountParam)}` +
+        `&bank=${encodeURIComponent(bankParam)}` +
+        `&accountNo=${encodeURIComponent(accountParam)}` +
+        `&origin=link`;
+
+      document.getElementById("tossLink").href = tossUrl;
+    }
+
+    function makeLink() {
+      const name = document.getElementById("name").value.trim();
+      const bank = document.getElementById("bank").value.trim();
+      const account = document.getElementById("account").value.trim();
+      const amount = document.getElementById("amount").value.trim();
+
+      if (!name || !bank || !account || !amount) {
+        alert("이름, 은행명, 계좌번호, 금액을 모두 입력해주세요.");
+        return;
+      }
+
+      const url = new URL(location.href);
+      url.searchParams.set("name", name);
+      url.searchParams.set("bank", bank);
+      url.searchParams.set("account", account);
+      url.searchParams.set("amount", amount);
+
+      window.createdLink = url.toString();
+
+      const result = document.getElementById("result");
+      result.classList.remove("hidden");
+      result.innerHTML = `아래 링크를 상대방에게 보내세요.<br><br>${window.createdLink}`;
+
+      document.getElementById("copyBtn").classList.remove("hidden");
+    }
+
+    async function copyLink() {
+      await navigator.clipboard.writeText(window.createdLink);
+      alert("링크가 복사됐습니다.");
+    }
+  </script>
+</body>
+</html>
+```
