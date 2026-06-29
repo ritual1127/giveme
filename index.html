@@ -373,10 +373,6 @@
 
         const tossUrl = makeTossUrl(amount, receiver.bank, receiver.account);
         document.getElementById("tossLink").href = tossUrl;
-
-        setTimeout(() => {
-          location.href = tossUrl;
-        }, 700);
       } catch {
         alert("송금 링크가 올바르지 않습니다.");
       }
