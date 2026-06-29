@@ -102,7 +102,7 @@
     button,
     a.button {
       width: 100%;
-      height: 52px;
+      min-height: 52px;
       border: 0;
       border-radius: 12px;
       background: #2563eb;
@@ -113,6 +113,8 @@
       display: grid;
       place-items: center;
       text-decoration: none;
+      padding: 0 14px;
+      text-align: center;
     }
 
     .person-buttons button {
@@ -257,7 +259,7 @@
 
       <div class="notice">30분 내로 송금해주세요.</div>
 
-      <a id="tossLink" class="button primary" href="#">토스 앱으로 바로 송금</a>
+      <a id="tossLink" class="button primary" href="#" target="_self">토스 앱으로 바로 송금</a>
 
       <div class="account-box">
         토스 앱이 열리지 않으면 아래 계좌로 송금해주세요.<br />
@@ -372,7 +374,7 @@
           `${receiver.bank} ${receiver.account}`;
 
         const tossUrl = makeTossUrl(amount, receiver.bank, receiver.account);
-        document.getElementById("tossLink").href = tossUrl;
+        document.getElementById("tossLink").setAttribute("href", tossUrl);
       } catch {
         alert("송금 링크가 올바르지 않습니다.");
       }
@@ -410,6 +412,11 @@
     }
 
     async function copyLink() {
+      if (!window.createdLink) {
+        alert("먼저 송금 링크를 만들어주세요.");
+        return;
+      }
+
       try {
         await navigator.clipboard.writeText(window.createdLink);
         alert("링크가 복사됐습니다.");
